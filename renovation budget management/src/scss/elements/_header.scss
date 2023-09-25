@@ -1,0 +1,28 @@
+.header {
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+}
+.menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding-left: 15rem;
+  padding-right: 15rem;
+  padding-bottom: 1rem;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+.submenu {
+  list-style: none;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-right: 10rem;
+}
+
+.submenu li {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
