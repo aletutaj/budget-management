@@ -1,13 +1,12 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import '../scss/elements/_subpageTable.scss';
 
-const SubpageTable = () => {
-    const [items, setItems] = useState([]);
-    const [newItem, setNewItem] = useState({name: '', quantity: 0, price: 0});
+const SubpageTable = ({ items, setItems }) => {
+    const [newItem, setNewItem] = useState({ name: '', quantity: 0, price: 0 });
 
     const handleAddItem = () => {
         setItems([...items, newItem]);
-        setNewItem({name: '', quantity: 0, price: 0});
+        setNewItem({ name: '', quantity: 0, price: 0 });
     };
 
     const handleRemoveItem = (index) => {
@@ -27,7 +26,7 @@ const SubpageTable = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {items.map((item, index) => (
+                {items && items.map((item, index) => (
                     <tr key={index}>
                         <td>{item.name}</td>
                         <td>{item.quantity}</td>
@@ -44,14 +43,14 @@ const SubpageTable = () => {
                     type="text"
                     placeholder="Nazwa"
                     value={newItem.name}
-                    onChange={(e) => setNewItem({...newItem, name: e.target.value})}
+                    onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
                 />
                 <input
                     type="number"
                     placeholder="Ilość"
                     value={newItem.quantity}
                     onChange={(e) =>
-                        setNewItem({...newItem, quantity: parseInt(e.target.value)})
+                        setNewItem({ ...newItem, quantity: parseInt(e.target.value) })
                     }
                 />
                 <input
@@ -59,7 +58,7 @@ const SubpageTable = () => {
                     placeholder="Cena"
                     value={newItem.price}
                     onChange={(e) =>
-                        setNewItem({...newItem, price: parseFloat(e.target.value)})
+                        setNewItem({ ...newItem, price: parseFloat(e.target.value) })
                     }
                 />
                 <button onClick={handleAddItem}>Dodaj</button>
