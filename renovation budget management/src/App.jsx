@@ -3,8 +3,12 @@ import Header from "./jsx/Header.jsx";
 import Footer from "./jsx/Footer.jsx";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import React from "react";
-import TablePage from "./jsx/TablePage.jsx";
 import Salon from "./jsx/Salon.jsx";
+import Kitchen from "./jsx/Kitchen.jsx";
+import Bathroom from "./jsx/Bathroom.jsx";
+import Office from "./jsx/Office.jsx";
+import Bedroom from "./jsx/Bedroom.jsx";
+import Home from "./jsx/Home.jsx";
 
 
 function App() {
@@ -14,12 +18,12 @@ function App() {
             <div>
                 <Header/>
                 <Routes>
-                    <Route path="/" element={TablePage}/>
+                    <Route path="/" element={<Home/>}/>
                     <Route path="/salon" element={<Salon/>}/>
-                    <Route path="/kuchnia" component={TablePage}/>
-                    <Route path="/lazienka" component={TablePage}/>
-                    <Route path="/gabinet" component={TablePage}/>
-                    <Route path="/sypialnia" component={TablePage}/>
+                    <Route path="/kuchnia" element={<Kitchen/>}/>
+                    <Route path="/lazienka" element={<Bathroom/>}/>
+                    <Route path="/gabinet" element={<Office/>}/>
+                    <Route path="/sypialnia" element={<Bedroom/>}/>
                 </Routes>
                 <Footer/>
             </div>
