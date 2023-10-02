@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import '../scss/elements/_subpageTable.scss';
-import {collection, getDocs, addDoc} from 'firebase/firestore';
+import {collection, getDocs, addDoc, deleteDoc, doc} from 'firebase/firestore';
 import {db} from '../firebase';
 import PropTypes from 'prop-types';
 
@@ -10,19 +10,27 @@ const SubpageTable = ({roomName, items, setItems}) => {
     const handleAddItem = async () => {
         try {
             const newItemRef = collection(db, roomName);
-            await addDoc(newItemRef, newItem);
+            const docRef = await addDoc(newItemRef, newItem);
+            const newItemWithId = {id: docRef.id, ...newItem};
+            setItems([...items, newItemWithId]);
             console.log('Dane dodane do bazy danych.');
         } catch (error) {
             console.error('Wystąpił błąd podczas dodawania danych:', error);
         }
 
-        setItems([...items, newItem]);
         setNewItem({name: '', quantity: 0, price: 0});
     };
 
-    const handleRemoveItem = (index) => {
-        const updatedItems = [...items];
-        updatedItems.splice(index, 1);
+    const handleRemoveItem = async (item) => {
+        try {
+            const itemDocRef = doc(db, roomName, item.id);
+            await deleteDoc(itemDocRef);
+            console.log('Dane usunięte z bazy danych.');
+        } catch (error) {
+            console.error('Wystąpił błąd podczas usuwania danych:', error);
+        }
+
+        const updatedItems = items.filter((i) => i.id !== item.id);
         setItems(updatedItems);
     };
 
@@ -61,13 +69,13 @@ const SubpageTable = ({roomName, items, setItems}) => {
                 </tr>
                 </thead>
                 <tbody>
-                {items.map((item, index) => (
+                {items.map((item) => (
                     <tr key={item.id}>
                         <td>{item.name}</td>
                         <td>{item.quantity}</td>
                         <td>{item.price}</td>
                         <td>
-                            <button onClick={() => handleRemoveItem(index)}>Usuń</button>
+                            <button onClick={() => handleRemoveItem(item)}>Usuń</button>
                         </td>
                     </tr>
                 ))}
@@ -107,4 +115,5 @@ SubpageTable.propTypes = {
     items: PropTypes.array.isRequired,
     setItems: PropTypes.func.isRequired,
 };
+
 export default SubpageTable;
