@@ -1,14 +1,21 @@
 import {useEffect, useState} from 'react';
 import '../scss/elements/_subpageTable.scss';
-import {collection, getDocs} from 'firebase/firestore';
+import {collection, getDocs, addDoc} from 'firebase/firestore';
 import {db} from '../firebase';
 import PropTypes from 'prop-types';
 
 const SubpageTable = ({roomName, items, setItems}) => {
-
     const [newItem, setNewItem] = useState({name: '', quantity: 0, price: 0});
 
-    const handleAddItem = () => {
+    const handleAddItem = async () => {
+        try {
+            const newItemRef = collection(db, roomName);
+            await addDoc(newItemRef, newItem);
+            console.log('Dane dodane do bazy danych.');
+        } catch (error) {
+            console.error('Wystąpił błąd podczas dodawania danych:', error);
+        }
+
         setItems([...items, newItem]);
         setNewItem({name: '', quantity: 0, price: 0});
     };
@@ -41,8 +48,7 @@ const SubpageTable = ({roomName, items, setItems}) => {
 
         fetchData();
     }, [roomName, setItems]);
-
-
+    
     return (
         <div>
             <table className="subpage-table">
@@ -95,11 +101,10 @@ const SubpageTable = ({roomName, items, setItems}) => {
         </div>
     );
 };
+
 SubpageTable.propTypes = {
     roomName: PropTypes.string.isRequired,
     items: PropTypes.array.isRequired,
-    addItem: PropTypes.func.isRequired,
-    removeItem: PropTypes.func.isRequired,
     setItems: PropTypes.func.isRequired,
 };
 export default SubpageTable;
