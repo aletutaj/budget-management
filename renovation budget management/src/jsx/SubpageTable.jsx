@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import {useEffect, useState} from 'react';
 import '../scss/elements/_subpageTable.scss';
+import {collection, getDocs} from 'firebase/firestore';
+import {db} from '../firebase';
+import PropTypes from 'prop-types';
 
-const SubpageTable = ({ items, setItems }) => {
-    const [newItem, setNewItem] = useState({ name: '', quantity: 0, price: 0 });
+const SubpageTable = ({roomName, items, setItems}) => {
+
+    const [newItem, setNewItem] = useState({name: '', quantity: 0, price: 0});
 
     const handleAddItem = () => {
         setItems([...items, newItem]);
-        setNewItem({ name: '', quantity: 0, price: 0 });
+        setNewItem({name: '', quantity: 0, price: 0});
     };
 
     const handleRemoveItem = (index) => {
@@ -14,6 +18,30 @@ const SubpageTable = ({ items, setItems }) => {
         updatedItems.splice(index, 1);
         setItems(updatedItems);
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!roomName) {
+                console.error('Wartość roomName jest pusta lub niepoprawna.');
+                return;
+            }
+
+            try {
+                const roomCollection = collection(db, roomName);
+                const querySnapshot = await getDocs(roomCollection);
+                const data = querySnapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(),
+                }));
+                setItems(data);
+            } catch (error) {
+                console.error('Wystąpił błąd podczas pobierania danych:', error);
+            }
+        };
+
+        fetchData();
+    }, [roomName, setItems]);
+
 
     return (
         <div>
@@ -23,11 +51,12 @@ const SubpageTable = ({ items, setItems }) => {
                     <th>Nazwa</th>
                     <th>Ilość</th>
                     <th>Cena</th>
+                    <th>Akcje</th>
                 </tr>
                 </thead>
                 <tbody>
-                {items && items.map((item, index) => (
-                    <tr key={index}>
+                {items.map((item, index) => (
+                    <tr key={item.id}>
                         <td>{item.name}</td>
                         <td>{item.quantity}</td>
                         <td>{item.price}</td>
@@ -43,14 +72,14 @@ const SubpageTable = ({ items, setItems }) => {
                     type="text"
                     placeholder="Nazwa"
                     value={newItem.name}
-                    onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+                    onChange={(e) => setNewItem({...newItem, name: e.target.value})}
                 />
                 <input
                     type="number"
                     placeholder="Ilość"
                     value={newItem.quantity}
                     onChange={(e) =>
-                        setNewItem({ ...newItem, quantity: parseInt(e.target.value) })
+                        setNewItem({...newItem, quantity: parseInt(e.target.value)})
                     }
                 />
                 <input
@@ -58,7 +87,7 @@ const SubpageTable = ({ items, setItems }) => {
                     placeholder="Cena"
                     value={newItem.price}
                     onChange={(e) =>
-                        setNewItem({ ...newItem, price: parseFloat(e.target.value) })
+                        setNewItem({...newItem, price: parseFloat(e.target.value)})
                     }
                 />
                 <button onClick={handleAddItem}>Dodaj</button>
@@ -66,5 +95,11 @@ const SubpageTable = ({ items, setItems }) => {
         </div>
     );
 };
-
+SubpageTable.propTypes = {
+    roomName: PropTypes.string.isRequired,
+    items: PropTypes.array.isRequired,
+    addItem: PropTypes.func.isRequired,
+    removeItem: PropTypes.func.isRequired,
+    setItems: PropTypes.func.isRequired,
+};
 export default SubpageTable;
