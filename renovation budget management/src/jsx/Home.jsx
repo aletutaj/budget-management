@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
-import { db } from '../firebase';
-import { collection, getDocs } from 'firebase/firestore';
+// import houseImage from '../assets/house.jpeg';
+import {useEffect, useState} from 'react';
+import {db} from '../firebase';
+import {collection, getDocs} from 'firebase/firestore';
+import Chart from 'chart.js/auto';
 
 const Home = () => {
     const [allItems, setAllItems] = useState([]);
@@ -15,7 +17,6 @@ const Home = () => {
                     const roomData = await getDataFromRoom(roomName);
                     allData.push(...roomData);
                 }
-
                 setAllItems(allData);
             } catch (error) {
                 console.error('Error while retrieving data:', error);
@@ -38,6 +39,34 @@ const Home = () => {
     const getTotalPrice = () => {
         return allItems.reduce((total, item) => total + item['cena łącznie'], 0);
     };
+
+    useEffect(() => {
+        if (allItems.length > 0) {
+            const labels = allItems.map((item) => item.name);
+            const prices = allItems.map((item) => item['cena łącznie']);
+
+            const ctx = document.getElementById('myChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            data: prices,
+                            backgroundColor: [
+                                'red',
+                                'blue',
+                                'green',
+                                'orange',
+                                'purple',
+                            ],
+                        },
+                    ],
+                },
+            });
+        }
+    }, [allItems]);
 
     return (
         <div>
@@ -67,6 +96,7 @@ const Home = () => {
                 </tr>
                 </tfoot>
             </table>
+            <canvas id="myChart" className="my-chart" width={300} height={300}></canvas>
         </div>
     );
 };
