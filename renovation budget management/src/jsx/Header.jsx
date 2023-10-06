@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import '../scss/elements/_header.scss';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
@@ -57,12 +57,12 @@ const Header = () => {
 
     return (
         <header className="header">
-            <div className="menu" onClick={toggleMenu}>
+            <div className="menu">
                 <Link to="/" onClick={handleHomeIconClick}>
                     <FontAwesomeIcon icon={faGlobe}/>
                 </Link>
                 <span>{headerText}</span>
-                <FontAwesomeIcon icon={faChevronDown}/>
+                <FontAwesomeIcon onClick={toggleMenu} icon={faChevronDown}/>
             </div>
             {menuVisible && (
                 <ul className="submenu">

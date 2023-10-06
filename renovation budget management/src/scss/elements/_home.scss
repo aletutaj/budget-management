@@ -1,0 +1,22 @@
+.main-page {
+    display: flex;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.summary {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.subpage-container {
+    width: 70%;
+    margin: 0 auto;
+}
