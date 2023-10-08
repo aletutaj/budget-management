@@ -1,4 +1,4 @@
-// import houseImage from '../assets/house.jpeg';
+import houseImage from '../assets/house.jpeg';
 import {useEffect, useState} from 'react';
 import {db} from '../firebase';
 import {collection, getDocs} from 'firebase/firestore';
@@ -64,6 +64,9 @@ const Home = () => {
                         },
                     ],
                 },
+                options: {
+                    responsive: false,
+                },
             });
         }
     }, [allItems]);
@@ -96,7 +99,16 @@ const Home = () => {
                 </tr>
                 </tfoot>
             </table>
-            <canvas id="myChart" className="my-chart" width={300} height={300}></canvas>
+            <div className="images" style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '40px',
+                paddingTop: '50px'
+            }}>
+                <canvas id="myChart" className="my-chart" style={{width: '320px'}}></canvas>
+                <img src={houseImage} alt="home" style={{width: '320px'}}/>
+            </div>
         </div>
     );
 };
