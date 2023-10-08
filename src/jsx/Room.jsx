@@ -2,6 +2,7 @@ import {useParams} from 'react-router-dom';
 import SubpageTable from './SubpageTable';
 import {useState} from "react";
 import '../scss/elements/_room.scss';
+import React from "react";
 
 const Room = () => {
     const {roomName} = useParams();
