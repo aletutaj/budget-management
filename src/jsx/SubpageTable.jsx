@@ -3,6 +3,7 @@ import '../scss/elements/_subpageTable.scss';
 import {collection, getDocs, addDoc, deleteDoc, doc} from 'firebase/firestore';
 import {db} from '../firebase';
 import PropTypes from 'prop-types';
+import React from "react";
 
 const SubpageTable = ({roomName, items, setItems}) => {
     const [newItem, setNewItem] = useState({name: '', quantity: 0, price: 0});

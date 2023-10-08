@@ -3,6 +3,7 @@ import {useEffect, useState} from 'react';
 import {db} from '../firebase';
 import {collection, getDocs} from 'firebase/firestore';
 import Chart from 'chart.js/auto';
+import React from "react";
 
 const Home = () => {
     const [allItems, setAllItems] = useState([]);
